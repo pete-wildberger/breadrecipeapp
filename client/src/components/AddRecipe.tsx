@@ -5,22 +5,22 @@ import * as React from 'react';
 interface IAddState {
   name: string;
   directions: string;
-  recipe: recipe;
+  recipe: Recipe;
 }
-interface recipe {
-  flours: Array<ingredient>;
-  liquid: Array<ingredient>;
-  preferment: preferment;
+interface Recipe {
+  flours: Array<Ingredient>;
+  liquid: Array<Ingredient>;
+  preferment: Preferment;
   salt: number;
-  other: Array<ingredient>;
+  other: Array<Ingredient>;
 }
-interface ingredient {
+interface Ingredient {
   type: string;
   percentage: number;
 }
-interface preferment {
-  flour: Array<ingredient>;
-  liquid: Array<ingredient>;
+interface Preferment {
+  flour: Array<Ingredient>;
+  liquid: Array<Ingredient>;
   starter: number;
 }
 
@@ -42,13 +42,39 @@ class AddState extends React.Component<IAddState> {
   handleDirectionChange = (event: React.FormEvent<HTMLTextAreaElement>): void => {
     this.setState({ directions: event.currentTarget.value });
   };
+  addIngredient = () => {
+    return (
+      <div>
+        <input placeholder="ingredient" />
+        <input placeholder="percent" />
+      </div>
+    );
+  };
 
   render() {
     return (
       <div>
-        Home
-        <input onChange={this.handleNameChange} />
-        <textarea onChange={this.handleDirectionChange} />
+        <div className="row">
+          <div className="col-3">
+            <input onChange={this.handleNameChange} />
+            <textarea onChange={this.handleDirectionChange} />
+          </div>
+          <div className="col-9">
+            <h3>Flours</h3>
+            <button onClick={this.addIngredient} />
+            <h3>Liquids</h3>
+            <button onClick={this.addIngredient} />
+            <h3>Salt</h3>
+            <button onClick={this.addIngredient} />
+            <h3>Other</h3>
+            <button onClick={this.addIngredient} />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12">
+            <button>Save</button>
+          </div>
+        </div>
       </div>
     );
   }

@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import AddRecipe from './components/AddRecipe';
+import List from './components/List';
+// import Display from './components/Display';
 import './styles/main.min.css';
 
 // 404 for people who get lost
@@ -12,7 +14,8 @@ class App extends React.Component {
       <BrowserRouter>
         <div className="app">
           <Switch>
-            <Route exact path="/" component={AddRecipe} />
+            <Route exact path="/" component={List} />
+            <Route exact path="/add" component={AddRecipe} />
             <Route component={FourOhFour} />
           </Switch>
         </div>
