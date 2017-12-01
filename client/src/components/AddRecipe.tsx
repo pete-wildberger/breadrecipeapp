@@ -1,20 +1,20 @@
 import * as React from 'react';
 // import axios from 'axios';
 // import { Link } from 'react-router-dom';
-
+interface Props {}
 interface IAddState {
   name: string;
   directions: string;
   recipe: Recipe;
+  ingredientInput: Ingredient;
 }
 interface Recipe {
-  flours: Array<Ingredient>;
-  liquid: Array<Ingredient>;
+  ingredients: Array<Ingredient>;
   preferment: Preferment;
   salt: number;
-  other: Array<Ingredient>;
 }
 interface Ingredient {
+  name: string;
   type: string;
   percentage: number;
 }
@@ -24,16 +24,33 @@ interface Preferment {
   starter: number;
 }
 
-class AddState extends React.Component<IAddState> {
-  constructor(props: any) {
+class AddState extends React.Component<Props, IAddState> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       name: '',
       directions: '',
-      recipe: {}
+      recipe: {
+        ingredients: [],
+        preferment: {
+          flour: [],
+          liquid: [],
+          starter: 0
+        },
+        salt: 0
+      },
+      ingredientInput: {
+        name: '',
+        type: '',
+        percentage: 0
+      }
     };
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleDirectionChange = this.handleDirectionChange.bind(this);
+    this.handleIngredientNameChange = this.handleIngredientNameChange.bind(this);
+    this.handleIngredientTypeChange = this.handleIngredientTypeChange.bind(this);
+    this.handleIngredientPercentageChange = this.handleIngredientPercentageChange.bind(this);
+    this.saveIngredient = this.saveIngredient.bind(this);
   }
   // input event handlers
   handleNameChange = (event: React.FormEvent<HTMLInputElement>): void => {
@@ -42,11 +59,29 @@ class AddState extends React.Component<IAddState> {
   handleDirectionChange = (event: React.FormEvent<HTMLTextAreaElement>): void => {
     this.setState({ directions: event.currentTarget.value });
   };
-  addIngredient = () => {
+  handleIngredientNameChange = (event: React.FormEvent<HTMLInputElement>): void => {
+    this.setState({ ingredientInput: { name: event.currentTarget.value } });
+  };
+  handleIngredientTypeChange = (event: React.FormEvent<HTMLInputElement>): void => {
+    this.setState({ ingredientInput: { type: event.currentTarget.value } });
+  };
+  handleIngredientPercentageChange = (event: React.FormEvent<HTMLInputElement>): void => {
+    this.setState({ ingredientInput: { percentage: event.currentTarget.value } });
+  };
+
+  saveIngredient = () => {
+    let stateCopy = this.state;
+    let ingredientArray: Array<Ingredient> = stateCopy.recipe.ingredients;
+    ingredientArray.push(stateCopy.ingredientInput);
+    this.setState({ recipe: { ingredients: ingredientArray } });
+  };
+  addIngredientInput = () => {
     return (
       <div>
-        <input placeholder="ingredient" />
-        <input placeholder="percent" />
+        <input onChange={this.handleIngredientNameChange} placeholder="ingredient" />
+        <input onChange={this.handleIngredientTypeChange} placeholder="ingredient type" />
+        <input onChange={this.handleIngredientPercentageChange} type="number" placeholder="percent" />
+        <button>Save</button>
       </div>
     );
   };
@@ -61,13 +96,13 @@ class AddState extends React.Component<IAddState> {
           </div>
           <div className="col-9">
             <h3>Flours</h3>
-            <button onClick={this.addIngredient} />
+            <button onClick={this.addIngredientInput} />
             <h3>Liquids</h3>
-            <button onClick={this.addIngredient} />
+            <button onClick={this.addIngredientInput} />
             <h3>Salt</h3>
-            <button onClick={this.addIngredient} />
+            <button onClick={this.addIngredientInput} />
             <h3>Other</h3>
-            <button onClick={this.addIngredient} />
+            <button onClick={this.addIngredientInput} />
           </div>
         </div>
         <div className="row">
