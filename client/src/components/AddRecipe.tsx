@@ -30,13 +30,17 @@ class AddState extends React.Component<IAddState> {
     this.state = {
       name: '',
       directions: '',
-      ingredients: []
+      recipe: {}
     };
     this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleDirectionChange = this.handleDirectionChange.bind(this);
   }
   // input event handlers
   handleNameChange = (event: React.FormEvent<HTMLInputElement>): void => {
     this.setState({ name: event.currentTarget.value });
+  };
+  handleDirectionChange = (event: React.FormEvent<HTMLTextAreaElement>): void => {
+    this.setState({ directions: event.currentTarget.value });
   };
 
   render() {
@@ -44,6 +48,7 @@ class AddState extends React.Component<IAddState> {
       <div>
         Home
         <input onChange={this.handleNameChange} />
+        <textarea onChange={this.handleDirectionChange} />
       </div>
     );
   }

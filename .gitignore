@@ -9,6 +9,7 @@ client/node_modules
 
 # production
 client/build
+client/src/styles/main.min.css
 
 # misc
 .DS_Store
