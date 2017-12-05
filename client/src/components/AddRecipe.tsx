@@ -5,14 +5,14 @@ interface Props {}
 interface IAddState {
   name: string;
   directions: string;
-  recipe: Recipe;
-  ingredientInput: Ingredient;
-}
-interface Recipe {
   ingredients: Array<Ingredient>;
   preferment: Preferment;
   salt: number;
+  inputName: string;
+  inputType: string;
+  inputPercentage: number;
 }
+
 interface Ingredient {
   name: string;
   type: string;
@@ -30,20 +30,16 @@ class AddState extends React.Component<Props, IAddState> {
     this.state = {
       name: '',
       directions: '',
-      recipe: {
-        ingredients: [],
-        preferment: {
-          flour: [],
-          liquid: [],
-          starter: 0
-        },
-        salt: 0
+      ingredients: [],
+      preferment: {
+        flour: [],
+        liquid: [],
+        starter: 0
       },
-      ingredientInput: {
-        name: '',
-        type: '',
-        percentage: 0
-      }
+      salt: 0,
+      inputName: '',
+      inputType: '',
+      inputPercentage: 0
     };
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleDirectionChange = this.handleDirectionChange.bind(this);
@@ -59,21 +55,25 @@ class AddState extends React.Component<Props, IAddState> {
   handleDirectionChange = (event: React.FormEvent<HTMLTextAreaElement>): void => {
     this.setState({ directions: event.currentTarget.value });
   };
-  handleIngredientNameChange = (event: React.FormEvent<HTMLInputElement>): void => {
-    this.setState({ ingredientInput: { name: event.currentTarget.value } });
+  handleIngredientNameChange = (event: React.SyntheticEvent<HTMLInputElement>): void => {
+    this.setState({ inputName: event.currentTarget.value });
   };
   handleIngredientTypeChange = (event: React.FormEvent<HTMLInputElement>): void => {
-    this.setState({ ingredientInput: { type: event.currentTarget.value } });
+    this.setState({ inputType: event.currentTarget.value });
   };
   handleIngredientPercentageChange = (event: React.FormEvent<HTMLInputElement>): void => {
-    this.setState({ ingredientInput: { percentage: event.currentTarget.value } });
+    this.setState({ inputPercentage: (event.currentTarget as any).value });
   };
 
   saveIngredient = () => {
     let stateCopy = this.state;
-    let ingredientArray: Array<Ingredient> = stateCopy.recipe.ingredients;
-    ingredientArray.push(stateCopy.ingredientInput);
-    this.setState({ recipe: { ingredients: ingredientArray } });
+    let ingredientArray: Array<Ingredient> = stateCopy.ingredients;
+    ingredientArray.push({
+      name: stateCopy.inputName,
+      type: stateCopy.inputType,
+      percentage: stateCopy.inputPercentage
+    });
+    this.setState({ ingredients: ingredientArray });
   };
   addIngredientInput = () => {
     return (
